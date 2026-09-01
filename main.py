@@ -11,7 +11,7 @@ def main():
         user_input = input("You: ")
 
         if user_input.lower() == "exit":
-            print("AMBER: Goodbye.")
+            print("AMBER: Adiós!")
             break
 
         response = process_input(user_input)
