@@ -85,3 +85,39 @@ def recall_persistent():
     connection.close()
 
     return memories
+
+def set_preference(key, value):
+    connection = sqlite3.connect(DATABASE)
+
+    connection.execute(
+        """
+        INSERT INTO preferences (key, value)
+        VALUES (?, ?)
+        ON CONFLICT(key) DO UPDATE SET
+            value = excluded.value,
+            updated_at = CURRENT_TIMESTAMP
+        """,
+        (key, value)
+    )
+
+    connection.commit()
+    connection.close()
+
+def get_preference(key):
+    connection = sqlite3.connect(DATABASE)
+
+    preference = connection.execute(
+        """
+        SELECT value
+        FROM preferences
+        WHERE key = ?
+        """,
+        (key,)
+    ).fetchone()
+
+    connection.close()
+
+    if preference:
+        return preference[0]
+
+    return None
